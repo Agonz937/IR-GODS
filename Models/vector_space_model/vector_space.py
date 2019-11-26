@@ -1,102 +1,115 @@
-import parser
-import lsa
-import tfidf
-import functools
-
-import sys
-
-
-try:
-	from numpy import dot
-	from numpy.linalg import norm
-except:
-	print("Error: Requires numpy from http://www.scipy.org/. Have you installed scipy?")
-	sys.exit() 
-
-class VectorSpace:
-    """ A algebraic model for representing text documents as vectors of identifiers. 
-    A document is represented as a vector. Each dimension of the vector corresponds to a 
-    separate term. If a term occurs in the document, then the value in the vector is non-zero.
-    """
-
-    collection_of_document_term_vectors = []
-    vector_index_to_keyword_mapping = []
-
-    parser = None
-
-    def __init__(self, documents = [], transforms = [tfidf.TFIDF, lsa.LSA]):
-    	self.collection_of_document_term_vectors = []
-    	self.parser = parser.Parser()
-    	if len(documents) > 0:
-    		self._build(documents, transforms)
+"""
+This class focuses on the vector space model and will compute all
+of the documents that we have stored in our data folder.
+"""
+import types
+import math
+import numpy as np
+from tf_idf import TFIDF
+from preprocess import PreprocessCorpus
+from collections import Counter
+from nltk.tokenize import word_tokenize
 
 
-    def related(self, document_id):
-        """ find documents that are related to the document indexed by passed Id within the document Vectors"""
-        ratings = [self._cosine(self.collection_of_document_term_vectors[document_id], document_vector) for document_vector in self.collection_of_document_term_vectors]
-        #ratings.sort(reverse = True)
-        return ratings
+class VectorSpaceModel:
+
+    def __init__(self, corpus):
+        if type(corpus) != list and corpus != []:
+            print("Must be send as a list")
+
+        self.tf_idf = ""
+        self.N = len(corpus)
+        self.total_vocab_size = 0
+        self.total_vocab = []
+        self.D = ""
+
+        if self.N > 0:
+            self.tf_idf = TFIDF(corpus)
+            self._build(self.tf_idf)
+
+    def _build(self, tf_idf):
+        self.tf_idf_result, self.total_vocab_size, self.total_vocab = tf_idf.get_results()
+        self.D = np.zeros((self.N, self.total_vocab_size))
 
 
-    def search(self, searchList):
-        temp = {}
-        print(self.vector_index_to_keyword_mapping)
-        """ search for documents that match based on a list of terms """
-        queryVector = self._build_query_vector(searchList)
-        print(queryVector)
+        for i in self.tf_idf_result:
+            try:
+                ind = self.total_vocab.index(i[1])
+                self.D[i[0]][ind] = self.tf_idf_result[i]
+            except:
+                pass
 
-        ratings = [self._cosine(queryVector, documentVector) for documentVector in self.collection_of_document_term_vectors]
-        #ratings.sort(reverse=True)
-        # for i in range(len(ratings)):
-        #     temp.update({i: ratings[i]})
-        return ratings
+    def _vectorize_query(self, tokens):
+        Q = np.zeros(len(self.total_vocab))
+        counter = Counter(tokens)
+        words_count = len(tokens)
 
+        query_weights = {}
+        for token in np.unique(tokens):
+            tf = counter[token] / words_count
+            df = self.tf_idf.doc_freq(word=token)
+            idf = math.log((self.N)/(df))
 
-    def _build(self, documents, transforms):
-        """ Create the vector space for the passed document strings """
-        self.vector_index_to_keyword_mapping = self._get_vector_keyword_index(documents)
-        matrix = [self._make_vector(document) for document in documents]
-        matrix = functools.reduce(lambda matrix,transform: transform(matrix).transform(), transforms, matrix)
-        self.collection_of_document_term_vectors = matrix
+            # print("token: {}\n\ttf: {}\n\tdf: {}\n\tidf: {}\n\t".format(token,tf,df,idf))
 
-    def _get_vector_keyword_index(self, document_list):
-        """ create the keyword associated to the position of the elements within the document vectors """
-        vocabulary_list = self.parser.tokenise_and_remove_stop_words(document_list)
-        unique_vocabulary_list = self._remove_duplicates(vocabulary_list)
-		
-        vector_index={}
-        offset=0
-        #Associate a position with the keywords which maps to the dimension on the vector used to represent this word
-        for word in unique_vocabulary_list:
-            vector_index[word] = offset
-            offset += 1
-        return vector_index  #(keyword:position)
+            try:
+                ind = self.total_vocab.index(token)
+                Q[ind] = tf * idf
+            except:
+                pass
+        return Q
 
+    def _cosine_sim(self, a, b):
+        cos_sim = np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+        return cos_sim
 
-    def _make_vector(self, word_string):
-    	""" @pre: unique(vectorIndex) """
+    def search(self, k, query):
+        preprocess_query = PreprocessCorpus(query).get_preprocessed_query()
+        query_vector = self._vectorize_query(preprocess_query)
 
-    	vector = [0] * len(self.vector_index_to_keyword_mapping) 
-
-    	word_list = self.parser.tokenise_and_remove_stop_words(word_string.split(" "))
-        
-    	for word in word_list:
-            vector[self.vector_index_to_keyword_mapping[word]] += 1 #Use simple Term Count Model
-    	return vector
+        d_cosine = []
+        for d in self.D:
+            d_cosine.append(self._cosine_sim(query_vector,d))
+        out = np.array(d_cosine).argsort()[-k:][::-1]
+        print(d_cosine)
+        print(out)
 
 
-    def _build_query_vector(self, term_list):
-    	""" convert query string into a term vector """
-    	query = self._make_vector(" ".join(term_list))
-    	return query
+# doc1 = "new york times"
+# doc2 = "new york post"
+# doc3 = "los angeles times"
+# doc4 = "Nothing to see here "
+
+# doc5 = "RAndom as shit here"
+# doc6 = "what the hell are yall looking at"
+# doc7 = "Omg i love new york"
+# doc8 = "Hell to nah this aint shit "
+
+# doc9 = "well well well what do we have here"
+# doc10 = "look what i found"
+# doc11 = "So I guess we meet again my young lee"
+# doc12 = "I have a big secret to tell you grandpapa "
 
 
-    def _remove_duplicates(self, list):
-        """ remove duplicates from a list """
-        return set((item for item in list))
-    
-        
-    def _cosine(self, vector1, vector2):
-    	""" related documents j and q are in the concept space by comparing the vectors :
-    		cosine  = ( V1 * V2 ) / ||V1|| x ||V2|| """
-    	return float(dot(vector1,vector2) / (norm(vector1) * norm(vector2)))
+# documents = []
+
+# documents.append(doc1)
+# documents.append(doc2)
+# documents.append(doc3)
+# documents.append(doc4)
+
+# documents.append(doc5)
+# documents.append(doc6)
+# documents.append(doc7)
+# documents.append(doc8)
+
+# documents.append(doc9)
+# documents.append(doc10)
+# documents.append(doc11)
+# documents.append(doc12)
+
+
+
+# vector_model = VectorSpaceModel(documents)
+
+# vector_model.search(k=4,query="look what i found")
