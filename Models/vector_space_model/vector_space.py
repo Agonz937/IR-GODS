@@ -5,8 +5,8 @@ of the documents that we have stored in our data folder.
 import types
 import math
 import numpy as np
-from tf_idf import TFIDF
-from preprocess import PreprocessCorpus
+from Models.vector_space_model.tf_idf import TFIDF
+from Models.vector_space_model.preprocess import PreprocessCorpus
 from collections import Counter
 from nltk.tokenize import word_tokenize
 
@@ -71,7 +71,7 @@ class VectorSpaceModel:
         for d in self.D:
             d_cosine.append(self._cosine_sim(query_vector,d))
         out = np.array(d_cosine).argsort()[-k:][::-1]
-        print(d_cosine)
+        print(d)
         print(out)
 
 

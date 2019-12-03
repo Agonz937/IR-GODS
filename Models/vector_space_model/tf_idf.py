@@ -1,8 +1,8 @@
 import types
 import numpy as np
 from collections import Counter
-from preprocess import PreprocessCorpus
-from document_frequency import DocumentFrequency
+from Models.vector_space_model.preprocess import PreprocessCorpus
+from Models.vector_space_model.document_frequency import DocumentFrequency
 
 class TFIDF:
     """This class will calculate the TF IDF """
