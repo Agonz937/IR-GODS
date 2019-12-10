@@ -27,9 +27,15 @@ class ReadFiles():
         with open("data/new_output.json") as json_file:
             self.data = json.load(json_file)
 
+<<<<<<< HEAD
         #Fetch by parameters
         if self._author != "":
             self._get_by_author()
+=======
+        # Fetch by parameters
+        # if self._author != "":
+        #     self._get_by_author()
+>>>>>>> 631dd5d49728ea7d9c9fb3d8ac3fd076908bf9ca
 
         # TODO testing
         self._get_all()
